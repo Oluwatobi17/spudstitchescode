@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+	<div class="checkout_area section-padding-80">
+		<div class="container">
+			<div class="row">
+
+				<div class="col-12 col-md-6">
+					<div class="checkout_details_area mt-50 clearfix">
+
+						<div class="cart-page-heading mb-30">
+							<h5>Create Account</h5>
+						</div>
+
+						<form action="#" method="post">
+							<div class="row">
+								<div class="col-12 mb-4">
+									<label for="email_address">Email</label>
+									<input type="email" class="form-control" id="email_address" value="">
+								</div>
+								<div class="col-12 mb-3">
+									<label for="firstname">First Name</label>
+									<input type="text" class="form-control mb-3" id="firstname">
+								</div>
+								<div class="col-12 mb-3">
+									<label for="lastname">Last Name</label>
+									<input type="text" class="form-control mb-3" id="lastname">
+								</div>
+								<div class="col-12 mb-3">
+									<label for="password1">Password</label>
+									<input type="password" class="form-control mb-3" id="password1">
+								</div>
+								<div class="col-12 mb-3">
+									<label for="password2">Confirm Password</label>
+									<input type="password" class="form-control mb-3" id="password2">
+								</div>
+
+								<div class="col-12">
+									<div class="custom-control custom-checkbox d-block mb-2">
+										<input type="checkbox" class="custom-control-input" id="customCheck1">
+										<label class="custom-control-label" for="customCheck1">Terms and conitions</label>
+									</div>
+								</div>
+								<div class="col-12 mb-3">
+									<input type="submit" value="Register" class="btn essence-btn">
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+
+				<div class="col-12 col-md-6 col-lg-5 ml-lg-auto">
+					<div class="order-details-confirmation">
+						<form action="" method="post">
+							<div class="cart-page-heading">
+								<h5>Login</h5>
+									<div class="col-12 mb-3">
+										<label for="firstname">Email</label>
+										<input type="text" class="form-control mb-3" id="firstname">
+									</div>
+									<div class="col-12 mb-3">
+										<label for="lastname">Password</label>
+										<input type="text" class="form-control mb-3" id="lastname">
+									</div>
+								<div class="col-12 mb-3">
+									<input type="submit" value="Login" class="btn essence-btn">
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- ##### Checkout Area End ##### -->
+{% endblock %}

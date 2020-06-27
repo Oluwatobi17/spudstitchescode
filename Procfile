@@ -1,0 +1,1 @@
+web: gunicorn spud.wsgi --log-file -
