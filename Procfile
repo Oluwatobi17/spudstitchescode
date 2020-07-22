@@ -1,3 +1,1 @@
-web: gunicorn spud.wsgi:application --log-file - --log-level debug
-python manage.py collectstatic --noinput
-manage.py migrate
+web: gunicorn spud.wsgi --log-file -

@@ -15,32 +15,37 @@
 							<h5>Create Account</h5>
 						</div>
 
-						<form action="#" method="post">
+						<form action="{% url 'signup' %}" method="post">
+							{% csrf_token %}
 							<div class="row">
+								<div class="col-12 mb-3">
+									<label for="username">Username</label>
+									<input type="text" class="form-control mb-3" id="username" name="username">
+								</div>
 								<div class="col-12 mb-4">
 									<label for="email_address">Email</label>
-									<input type="email" class="form-control" id="email_address" value="">
+									<input type="email" class="form-control" id="email_address" name="email">
 								</div>
 								<div class="col-12 mb-3">
 									<label for="firstname">First Name</label>
-									<input type="text" class="form-control mb-3" id="firstname">
+									<input type="text" class="form-control mb-3" id="firstname" name="first_name">
 								</div>
 								<div class="col-12 mb-3">
 									<label for="lastname">Last Name</label>
-									<input type="text" class="form-control mb-3" id="lastname">
+									<input type="text" class="form-control mb-3" id="lastname" name="last_name">
 								</div>
 								<div class="col-12 mb-3">
 									<label for="password1">Password</label>
-									<input type="password" class="form-control mb-3" id="password1">
+									<input type="password" class="form-control mb-3" id="password1" name="password">
 								</div>
 								<div class="col-12 mb-3">
 									<label for="password2">Confirm Password</label>
-									<input type="password" class="form-control mb-3" id="password2">
+									<input type="password" class="form-control mb-3" id="password2" name="password2">
 								</div>
 
 								<div class="col-12">
 									<div class="custom-control custom-checkbox d-block mb-2">
-										<input type="checkbox" class="custom-control-input" id="customCheck1">
+										<input type="checkbox" class="custom-control-input" id="customCheck1" required>
 										<label class="custom-control-label" for="customCheck1">Terms and conitions</label>
 									</div>
 								</div>
@@ -54,16 +59,17 @@
 
 				<div class="col-12 col-md-6 col-lg-5 ml-lg-auto">
 					<div class="order-details-confirmation">
-						<form action="" method="post">
+						<form action="{% url 'signin' %}" method="post">
+							{% csrf_token %}
 							<div class="cart-page-heading">
 								<h5>Login</h5>
 									<div class="col-12 mb-3">
-										<label for="firstname">Email</label>
-										<input type="text" class="form-control mb-3" id="firstname">
+										<label for="username">Username</label>
+										<input type="text" class="form-control mb-3" id="username" name="username">
 									</div>
 									<div class="col-12 mb-3">
-										<label for="lastname">Password</label>
-										<input type="text" class="form-control mb-3" id="lastname">
+										<label for="password">Password</label>
+										<input type="password" class="form-control mb-3" id="password" name="password">
 									</div>
 								<div class="col-12 mb-3">
 									<input type="submit" value="Login" class="btn essence-btn">

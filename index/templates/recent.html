@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+
+{% block content %}
+
+	<!-- ##### Shop Grid Area Start ##### -->
+	<section class="shop_grid_area section-padding-80">
+		<div class="container">
+			<div class="row">
+				<div class="col-12 col-md-4 col-lg-3">
+					<div class="shop_sidebar_area">
+
+						<!-- ##### Single Widget ##### -->
+						<div class="widget catagory mb-50">
+							<!-- Widget Title -->
+							<!--  Catagories  -->
+							<div class="catagories-menu">
+								<ul id="menu-content2" class="menu-content collapse show">
+									<!-- Single Item -->
+									<li data-toggle="collapse" data-target="#clothing">
+										<a href="{% url 'account' %}"><img src="{% static 'index/img/core-img/user.svg' %}" class="dac-icons">My Spud Account</a>
+									</li>
+									<!-- Single Item -->
+									<li data-toggle="collapse" data-target="#shoes" class="collapsed">
+										<a href="{% url 'orders' %}"><img src="{% static 'index/img/core-img/bag.svg' %}" class="dac-icons">Orders</a>
+									</li>
+									<!-- Single Item -->
+									<li data-toggle="collapse" data-target="#accessories" class="collapsed">
+										<a href="{% url 'pending' %}"><img src="{% static 'index/img/core-img/pending.png' %}" class="dac-icons">Pending Orders</a>
+									</li>
+									<li data-toggle="collapse" data-target="#accessories" class="collapsed">
+										<a href="{% url 'wishlist' %}"><img src="{% static 'index/img/core-img/heart.svg' %}"  class="dac-icons">Saved Items</a>
+									</li>
+									<li data-toggle="collapse" data-target="#accessories" class="collapsed">
+										<a href="{% url 'recent' %}"><img src="{% static 'index/img/core-img/recent.png' %}" class="dac-icons">Recently Viewed</a>
+									</li>
+									<li data-toggle="collapse" data-target="#accessories" class="collapsed">
+										<a href="{% url 'changepassword' %}"><img src="{% static 'index/img/core-img/password.png' %}" class="dac-icons">Change Password</a>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-12 col-md-8 col-lg-9">
+					<div class="shop_grid_product_area">
+						<div class="row">
+							<div class="col-12">
+								<div class="product-topbar d-flex align-items-center justify-content-between">
+									<!-- Total Products -->
+									<div class="total-products">
+										<p><span>{{ recent | length }}</span> Recently Viewed Items</p>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="row">
+							{% for key,item in recent.items %}
+								<!-- Single Product -->					
+								<div class="col-12 col-sm-6 col-lg-4">
+									<div class="single-product-wrapper">
+										<!-- Product Image -->
+										<div class="product-img">
+											{% if item.picture1 == 'Empty' %}
+											<img src="{% static 'index/img/product-img/product-1.jpg' %}" alt="">
+											<!-- Hover Thumb -->
+											<img class="hover-img" src="{% static 'index/img/product-img/product-2.jpg' %}" alt="">
+											{% else %}
+											<img src="{{ item.picture1 }}" alt="">
+											<!-- Hover Thumb -->
+											<img class="hover-img" src="{{ item.picture2 }}" alt="">
+											{% endif %}
+											<!-- Product Badge -->
+											<div class="product-badge offer-badge">
+												<span>-30%</span>
+											</div>
+											<!-- Favourite -->
+											<div class="product-favourite">
+												<a href="#" class="favme fa fa-heart"></a>
+											</div>
+										</div>
+
+										<!-- Product Description -->
+										<div class="product-description">
+											<a href="{% url 'product' key %}">
+												<h6>{{ item.title }}</h6>
+											</a>
+											<p class="product-price"><span class="old-price">$00.00</span> #{{ item.price }}</p>
+
+											<!-- Hover Content -->
+											<div class="hover-content">
+												<!-- Add to Cart -->
+												<div class="add-to-cart-btn">
+													<a href="#" class="btn essence-btn">Add to Cart</a>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							{% endfor %}
+
+						</div>
+					</div>
+					<!-- Pagination -->
+					<!-- <nav aria-label="navigation">
+						<ul class="pagination mt-50 mb-70">
+							<li class="page-item"><a class="page-link" href="#"><i class="fa fa-angle-left"></i></a></li>
+							<li class="page-item"><a class="page-link" href="#">1</a></li>
+							<li class="page-item"><a class="page-link" href="#">2</a></li>
+							<li class="page-item"><a class="page-link" href="#">3</a></li>
+							<li class="page-item"><a class="page-link" href="#">...</a></li>
+							<li class="page-item"><a class="page-link" href="#">21</a></li>
+							<li class="page-item"><a class="page-link" href="#"><i class="fa fa-angle-right"></i></a></li>
+						</ul>
+					</nav> -->
+				</div>
+			</div>
+		</div>
+	</section>
+	<!-- ##### Shop Grid Area End ##### -->
+{% endblock %}
