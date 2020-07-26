@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+
+{% block content %}
+
+	<!-- ##### Shop Grid Area Start ##### -->
+	<section class="shop_grid_area section-padding-80">
+		<div class="container">
+			<div class="row">
+				<div class="col-12 col-md-4 col-lg-3">
+					<div class="shop_sidebar_area">
+
+						<!-- ##### Single Widget ##### -->
+						<div class="widget catagory mb-50">
+							<!-- Widget Title -->
+							<!--  Catagories  -->
+							<div class="catagories-menu">
+								<ul id="menu-content2" class="menu-content collapse show">
+									<!-- Single Item -->
+									<li data-toggle="collapse" data-target="#clothing">
+										<a href="{% url 'account' %}"><img src="{% static 'index/img/core-img/user.svg' %}" class="dac-icons">My Spud Account</a>
+									</li>
+									<!-- Single Item -->
+									<li data-toggle="collapse" data-target="#shoes" class="collapsed">
+										<a href="{% url 'orders' %}"><img src="{% static 'index/img/core-img/bag.svg' %}" class="dac-icons">Orders</a>
+									</li>
+									<!-- Single Item -->
+									<li data-toggle="collapse" data-target="#accessories" class="collapsed">
+										<a href="{% url 'pending' %}"><img src="{% static 'index/img/core-img/pending.png' %}" class="dac-icons">Pending Orders</a>
+									</li>
+									<li data-toggle="collapse" data-target="#accessories" class="collapsed">
+										<a href="{% url 'wishlist' %}"><img src="{% static 'index/img/core-img/heart.svg' %}"  class="dac-icons">Saved Items</a>
+									</li>
+									<li data-toggle="collapse" data-target="#accessories" class="collapsed">
+										<a href="{% url 'recent' %}"><img src="{% static 'index/img/core-img/recent.png' %}" class="dac-icons">Recently Viewed</a>
+									</li>
+									<li data-toggle="collapse" data-target="#accessories" class="collapsed">
+										<a href="{% url 'changepassword' %}"><img src="{% static 'index/img/core-img/password.png' %}" class="dac-icons">Change Password</a>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-12 col-md-8 col-lg-9">
+					<div class="order-details-confirmation">
+
+                        <div class="cart-page-heading">
+                            <h5>Your Order ({{orders | length}})</h5>
+                        </div>
+                        {% for order in orders %}
+                        <ul class="order-details-form mb-4">
+                            <li><span>Cart Date</span> <span>Total</span></li>
+                            <li><span>{{order.date}}</span> <span>#{{order.total_price}}</span></li>
+                        </ul>
+                        {% endfor %}
+                    </div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!-- ##### Shop Grid Area End ##### -->
+{% endblock %}

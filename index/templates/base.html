@@ -20,6 +20,12 @@
     <link rel="stylesheet" href="{% static 'index/style.css' %}">
     <link rel="stylesheet" href="{% static 'index/css/dac.css' %}">
 
+    <style type="text/css">
+        .spud-logo{
+            width: 60px;
+            height: 40px;
+        }
+    </style>
 </head>
 
 <body>
@@ -29,7 +35,7 @@
             <!-- Classy Menu -->
             <nav class="classy-navbar" id="essenceNav">
                 <!-- Logo -->
-                <a class="nav-brand" href="index.html"><img src="{% static 'index/img/core-img/logo.png' %}" alt=""></a>
+                <a class="nav-brand spud-logo" href="index.html"><img src="{% static 'index/img/core-img/spud.png' %}" alt=""></a>
                 <!-- Navbar Toggler -->
                 <div class="classy-navbar-toggler">
                     <span class="navbarToggler"><span></span><span></span><span></span></span>
@@ -99,7 +105,7 @@
                 </div>
                 <!-- Favourite Area -->
                 <div class="favourite-area">
-                    <a href="#"><img src="{% static 'index/img/core-img/heart.svg' %}" alt=""></a>
+                    <a href="{% url 'wishlist' %}"><img src="{% static 'index/img/core-img/heart.svg' %}" alt=""></a>
                 </div>
                 <!-- User Login Info -->
                 <div class="user-login-info">
@@ -108,7 +114,7 @@
                 </div>
                 <!-- Cart Area -->
                 <div class="cart-area">
-                    <a href="#" id="essenceCartBtn"><img src="{% static 'index/img/core-img/bag.svg' %}" alt=""> <span>3</span></a>
+                    <a href="#" id="essenceCartBtn"><img src="{% static 'index/img/core-img/bag.svg' %}" alt=""> <span>{{ cart | length }}</span></a>
                 </div>
             </div>
 
@@ -131,7 +137,7 @@
 
         <!-- Cart Button -->
         <div class="cart-button">
-            <a href="#" id="rightSideCart"><img src="{% static 'index/img/core-img/bag.svg' %}" alt=""> <span>3</span></a>
+            <a href="#" id="rightSideCart"><img src="{% static 'index/img/core-img/bag.svg' %}" alt=""> <span>{{ cart | length }}</span></a>
         </div>
 
         <div class="cart-content d-flex">
@@ -139,52 +145,22 @@
             <!-- Cart List Area -->
             <div class="cart-list">
                 <!-- Single Cart Item -->
-                <div class="single-cart-item">
-                    <a href="#" class="product-image">
-                        <img src="{% static 'index/img/product-img/product-1.jpg' %}" class="cart-thumb" alt="">
-                        <!-- Cart Item Desc -->
-                        <div class="cart-item-desc">
-                          <span class="product-remove"><i class="fa fa-close" aria-hidden="true"></i></span>
-                            <span class="badge">Mango</span>
-                            <h6>Button Through Strap Mini Dress</h6>
-                            <p class="size">Size: S</p>
-                            <p class="color">Color: Red</p>
-                            <p class="price">$45.00</p>
-                        </div>
-                    </a>
-                </div>
-
-                <!-- Single Cart Item -->
-                <div class="single-cart-item">
-                    <a href="#" class="product-image">
-                        <img src="{% static 'index/img/product-img/product-2.jpg' %}" class="cart-thumb" alt="">
-                        <!-- Cart Item Desc -->
-                        <div class="cart-item-desc">
-                          <span class="product-remove"><i class="fa fa-close" aria-hidden="true"></i></span>
-                            <span class="badge">Mango</span>
-                            <h6>Button Through Strap Mini Dress</h6>
-                            <p class="size">Size: S</p>
-                            <p class="color">Color: Red</p>
-                            <p class="price">$45.00</p>
-                        </div>
-                    </a>
-                </div>
-
-                <!-- Single Cart Item -->
-                <div class="single-cart-item">
-                    <a href="#" class="product-image">
-                        <img src="{% static 'index/img/product-img/product-3.jpg' %}" class="cart-thumb" alt="">
-                        <!-- Cart Item Desc -->
-                        <div class="cart-item-desc">
-                          <span class="product-remove"><i class="fa fa-close" aria-hidden="true"></i></span>
-                            <span class="badge">Mango</span>
-                            <h6>Button Through Strap Mini Dress</h6>
-                            <p class="size">Size: S</p>
-                            <p class="color">Color: Red</p>
-                            <p class="price">$45.00</p>
-                        </div>
-                    </a>
-                </div>
+                {% for key, item in cart.items %}
+                    <div class="single-cart-item">
+                        <a href="#" class="product-image">
+                            <img src="{% static 'index/img/product-img/product-1.jpg' %}" class="cart-thumb" alt="">
+                            <!-- Cart Item Desc -->
+                            <div class="cart-item-desc">
+                              <span class="product-remove"><i class="fa fa-close" aria-hidden="true"></i></span>
+                                <span class="badge">Spud Stitches</span>
+                                <h6>{{ item.title }}</h6>
+                                <p class="size">Size: {{ item.size }}</p>
+                                <p class="color">Color: {{ item.color }}</p>
+                                <p class="price">#{{ item.price }}</p>
+                            </div>
+                        </a>
+                    </div>
+                {% endfor %}
             </div>
 
             <!-- Cart Summary -->
@@ -192,10 +168,10 @@
 
                 <h2>Summary</h2>
                 <ul class="summary-table">
-                    <li><span>subtotal:</span> <span>$274.00</span></li>
+                    <li><span>subtotal:</span> <span class="subtotal">#0</span></li>
                     <li><span>delivery:</span> <span>Free</span></li>
-                    <li><span>discount:</span> <span>-15%</span></li>
-                    <li><span>total:</span> <span>$232.00</span></li>
+                    <li><span>discount:</span> <span>-0%</span></li>
+                    <li><span>total:</span> <span class="total">#0</span></li>
                 </ul>
                 <div class="checkout-btn mt-100">
                     <a href="{% url 'checkout' %}" class="btn essence-btn">check out</a>
@@ -218,7 +194,7 @@
                     <div class="single_widget_area d-flex mb-30">
                         <!-- Logo -->
                         <div class="footer-logo mr-50">
-                            <a href="#"><img src="{% static 'index/img/core-img/logo2.png' %}" alt=""></a>
+                            <a href="#"><img src="{% static 'index/img/core-img/spud.png' %}" class="spud-logo" alt=""></a>
                         </div>
                         <!-- Footer Menu -->
                         <div class="footer_menu">
@@ -301,6 +277,17 @@
     <!-- Active js -->
     <script src="{% static '/index/js/active.js' %}"></script>
 
+    <script type="text/javascript">
+        $(document).ready(()=>{
+            var cart = {{cart | safe}}
+            var total = 0
+            for(var item in cart){
+                total += cart[item]['price']
+            }
+            $('.summary-table .total').text('#'+total)
+            $('.summary-table .subtotal').text('#'+total)
+        })
+    </script>
 </body>
 
 </html>

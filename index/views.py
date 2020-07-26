@@ -6,17 +6,16 @@ from django.contrib.auth import login as login_user
 from django.contrib.auth import logout as logout_user
 from django.contrib import messages
 from .models import User, Commodity, Cart, Order
-from .forms import UserForm, CheckoutForm
+from .forms import UserForm, CheckoutForm,UserUpdateForm
 
 
 
 
 def index(request):
-	request.session['favourites'] = {}
-	request.session['cart'] = {}
 	return render(request, 'index.html', {
 		'title': 'Spud Stitches',
-		'popular': Commodity.objects.all().order_by('-qty_avail')[:5]
+		'popular': Commodity.objects.all().order_by('-qty_avail')[:5],
+		'cart': request.session.get('cart', {})
 		})
 
 def shop(request, category):
@@ -25,7 +24,8 @@ def shop(request, category):
 		commodities_obj = Commodity.objects.all() 
 	else:
 		# tag = get_object_or_404(Tag, slug=category)
-		commodities_obj = Commodity.objects.filter(tags__name=category)
+		commodities_obj = Commodity.objects.filter(tags__name=category)	
+
 
 	paginator = Paginator(commodities_obj, 9)
 	page = request.GET.get('page') or 1
@@ -33,16 +33,34 @@ def shop(request, category):
 		commodities = paginator.page(page)
 	else:
 		commodities = paginator.page(paginator.num_pages)
+
 	return render(request, 'shop.html', {
 		'title': category.upper()+': Shop now',
 		'commodities': commodities,
-		'category': category
+		'category': category,
+		'cart': request.session.get('cart', {})
 		})
 
 def account(request):
 	if request.user.is_authenticated:
+		if request.method=='POST':
+			update = UserUpdateForm(request.POST)
+			if update.is_valid():
+				user = User.objects.get(username=request.user.username)
+				user.first_name = update.cleaned_data['first_name']
+				user.last_name = update.cleaned_data['last_name']
+				user.address = update.cleaned_data['address']
+				user.phoneno = update.cleaned_data['phoneno']
+				user.email = update.cleaned_data['email']
+				user.save()
+				messages.success(request, 'Account Updated')
+				return redirect(account)
+
+			else: messages.error(request, 'Please fill all required form')
+
 		return render(request, 'account.html', {
-			'title': 'My Spud Stitches Account Summary'
+			'title': 'My Spud Stitches Account Summary',
+			'cart': request.session.get('cart', {})
 			})
 
 	messages.error(request, "Please login or signup if you don't have an account yet")
@@ -50,8 +68,11 @@ def account(request):
 
 def orders(request):
 	if request.user.is_authenticated:
+		user = User.objects.get(username=request.user.username)
 		return render(request, 'orders.html', {
-			'title': 'My Spud Stitches Orders'
+			'title': 'My Spud Stitches Orders',
+			'cart': request.session.get('cart', {}),
+			'orders': user.cart_set.filter(delivered=True)
 			})
 
 	messages.error(request, "Please login or signup if you don't have an account yet")
@@ -60,8 +81,11 @@ def orders(request):
 
 def pendingOrders(request):
 	if request.user.is_authenticated:
+		user = User.objects.get(username=request.user.username)
 		return render(request, 'pendingOrders.html', {
-			'title': 'My Spud Stitches Pending Orders'
+			'title': 'My Spud Stitches Pending Orders',
+			'cart': request.session.get('cart', {}),
+			'pending': user.cart_set.filter(delivered=False)
 			})
 
 	messages.error(request, "Please login or signup if you don't have an account yet")
@@ -72,23 +96,20 @@ def wishlist(request):
 		wishlist = request.session.get('favourites', {})
 		return render(request, 'wishlist.html', {
 			'title': 'My Spud Stitches Wish List',
-			'wishlist': wishlist
+			'wishlist': wishlist,
+			'cart': request.session.get('cart', {})
 			})
 
 	messages.error(request, "Please login or signup if you don't have an account yet")
 	return redirect(login)
 
 def recent(request):
-	if request.user.is_authenticated:
-		if not request.session.get('recentlyviewed'):
-			request.session['recentlyviewed'] = {}
-		return render(request, 'recent.html', {
-			'title': 'My Spud Stitches Recently viewed',
-			'recent': request.session['recentlyviewed']
-			})
 
-	messages.error(request, "Please login or signup if you don't have an account yet")
-	return redirect(login)
+	return render(request, 'recent.html', {
+		'title': 'My Spud Stitches Recently viewed',
+		'recent': request.session.get('recentlyviewed', {}),
+		'cart': request.session.get('cart', {})
+		})
 
 def changepassword(request):
 	if request.user.is_authenticated:
@@ -108,7 +129,8 @@ def changepassword(request):
 
 
 		return render(request, 'changepassword.html', {
-			'title': 'My Spud Stitches Change Password'
+			'title': 'My Spud Stitches Change Password',
+			'cart': request.session.get('cart', {})
 			})
 
 	messages.error(request, "Please login or signup if you don't have an account yet")
@@ -117,13 +139,15 @@ def changepassword(request):
 
 def cart(request):
 	return render(request, 'cart.html', {
-		'title': 'My Spud Stitches Cart'
+		'title': 'My Spud Stitches Cart',
+		'cart': request.session.get('cart', {})
 		})
 
 
 def products(request, category):
 	return render(request, 'shop.html', {
-		'title': 'Sweat Shirts'
+		'title': 'Sweat Shirts',
+		'cart': request.session.get('cart', {})
 		})
 
 
@@ -148,12 +172,14 @@ def product(request, id):
 	request.session['recentlyviewed'][id] = item 
 
 	return render(request, 'product.html', {
-		'title': commodity.title
+		'title': commodity.title,
+		'cart': request.session.get('cart', {})
 		})
 
 def contact(request):
 	return render(request, 'contact.html', {
-		'title': 'Contact Us'
+		'title': 'Contact Us',
+		'cart': request.session.get('cart', {})
 		})
 
 def checkout(request):
@@ -186,7 +212,8 @@ def checkout(request):
 		return redirect(login)
 
 	return render(request, 'checkout.html', {
-		'title': 'Checkout'
+		'title': 'Checkout',
+		'cart': request.session.get('cart', {})
 		})
 
 
@@ -209,7 +236,8 @@ def login(request):
 		return redirect(login)
 	else:
 		return render(request, 'login.html', {
-			'title': 'Sign In or Sign Up to Spud Stitches Store'
+			'title': 'Sign In or Sign Up to Spud Stitches Store',
+			'cart': request.session.get('cart', {})
 			})
 
 def signup(request):

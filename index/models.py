@@ -5,6 +5,7 @@ from taggit.managers import TaggableManager
 class User(AbstractUser):
 	phoneno = models.CharField(max_length=20)
 	favorites = models.CharField(max_length=1000) # My array
+	address = models.CharField(max_length=200, default='No address')
 
 	def __str__(self):
 		return self.username

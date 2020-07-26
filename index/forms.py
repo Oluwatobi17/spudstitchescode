@@ -15,3 +15,9 @@ class CheckoutForm(forms.ModelForm):
 		model = Cart
 		fields = ['user','name', 'address','town', 'phoneno', 'email']
 
+
+class UserUpdateForm(forms.ModelForm):
+	class Meta:
+		model = User
+		fields = ['first_name','last_name', 'address', 'phoneno', 'email']
+
