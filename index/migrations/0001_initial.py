@@ -13,10 +13,10 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-        ('auth', '0012_alter_user_first_name_max_length'),
-        ('taggit', '0003_taggeditem_add_unique_index'),
-    ]
+    # dependencies = [
+    #     ('auth', '0012_alter_user_first_name_max_length'),
+    #     ('taggit', '0003_taggeditem_add_unique_index'),
+    # ]
 
     operations = [
         migrations.CreateModel(
