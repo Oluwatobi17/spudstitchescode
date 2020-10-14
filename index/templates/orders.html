@@ -49,14 +49,14 @@
 					<div class="order-details-confirmation">
 
                         <div class="cart-page-heading">
-                            <h5>Your Order ({{orders | length}})</h5>
+                            <h5>Your Orders ({{orders | length}})</h5>
                         </div>
-                        {% for order in orders %}
                         <ul class="order-details-form mb-4">
                             <li><span>Cart Date</span> <span>Total</span></li>
-                            <li><span>{{order.date}}</span> <span>#{{order.total_price}}</span></li>
+                            {% for cart in orders %}
+                            	<li><span><a href="{% url 'order' cart.pk %}">{{cart.date}}</a></span> <span>#{{cart.total_price}}</span></li>
+                        	{% endfor %}
                         </ul>
-                        {% endfor %}
                     </div>
 				</div>
 			</div>

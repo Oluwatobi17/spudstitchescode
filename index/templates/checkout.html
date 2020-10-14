@@ -32,19 +32,20 @@
                         <form action="{% url 'checkout' %}" method="post">
                             {% csrf_token %}
                             <div class="row">
-                                <div class="col-md-6 mb-3">
+                                <!-- <div class="col-md-6 mb-3">
                                     <label for="first_name">First Name <span>*</span></label>
-                                    <input type="hidden" class="form-control" value={{request.user.pk}} name="user" required>
+                                    
                                     <input type="text" class="form-control" id="first_name" name="name" required>
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label for="last_name">Last Name <span>*</span></label>
                                     <input type="text" class="form-control" id="last_name" name="last_name" required>
                                 </div>
-                                <!-- <div class="col-12 mb-3">
-                                    <label for="company">Company Name</label>
-                                    <input type="text" class="form-control" id="company" value="">
-                                </div> -->
+ -->                            <div class="col-12 mb-3">
+                                    <label for="name">Name</label>
+                                    <input type="text" class="form-control" id="name" value="{{request.user.first_name}} {{request.user.last_name}}" placeholder="First Name and Last Name" name="name">
+                                </div>
+                                <input type="hidden" class="form-control" value={{request.user.pk}} name="user" required>
                                 <div class="col-12 mb-3">
                                     <label for="country">Country <span>*</span></label>
                                     <select class="w-100" id="country">
@@ -53,25 +54,44 @@
                                 </div>
                                 <div class="col-12 mb-3">
                                     <label for="street_address">Address <span>*</span></label>
-                                    <input type="text" class="form-control mb-3" id="street_address" name="address">
+                                    <input type="text" class="form-control mb-3" id="street_address" value="{{request.user.address}}" name="address">
                                 </div>
                                 <!-- <div class="col-12 mb-3">
                                     <label for="postcode">Postcode <span>*</span></label>
                                     <input type="text" class="form-control" id="postcode" value="">
                                 </div> -->
                                 <div class="col-12 mb-3">
-                                    <label for="city">Town/City <span>*</span></label>
-                                    <input type="text" class="form-control" id="city" name="town">
+                                    <label for="town">Town/City <span>*</span></label>
+                                    <!-- <input type="text" class="form-control" id="city" name="town"> -->
+                                    <select class="w-100 delivLoc" id="town" name="town" size="10" required>
+                                        {% for loc in delivLoc1 %}
+                                        <option value="{{loc}}">{{loc}}</option>
+                                        {% endfor %}
+                                        {% for loc in delivLoc2 %}
+                                        <option value="{{loc}}">{{loc}}</option>
+                                        {% endfor %}
+                                        {% for loc in delivLoc3 %}
+                                        <option value="{{loc}}">{{loc}}</option>
+                                        {% endfor %}
+                                    </select>
                                 </div>
                                 <div class="col-12 mb-3">
                                     <label for="phone_number">Phone No <span>*</span></label>
-                                    <input type="number" class="form-control" id="phone_number" min="0" name="phoneno">
+                                    <input type="number" class="form-control" id="phone_number" min="0" name="phoneno" value="{{request.user.phoneno}}">
                                 </div>
                                 <div class="col-12 mb-4">
                                     <label for="email_address">Email Address <span>*</span></label>
-                                    <input type="email" class="form-control" id="email_address" name="email">
+                                    <input type="email" class="form-control" id="email_address" value="{{request.user.email}}" name="email">
                                 </div>
-
+                                <div class="col-12 mb-3">
+                                    <label for="payment">Payment Method <span>*</span></label>
+                                    <select class="w-100" id="payment" required name="paymentmethod">
+                                        <!-- <option value="paypal">Paypal</option> -->
+                                        <option value="cash">On Delivery</option>
+                                        <option value="cc">Card</option><!-- 
+                                        <option value="Btransfer">Direct Bank Transfer</option> -->
+                                    </select>
+                                </div>
                                 <div class="col-12">
                                     <div class="custom-control custom-checkbox d-block mb-2">
                                         <input type="checkbox" class="custom-control-input" id="customCheck1" required>
@@ -94,70 +114,81 @@
                         </div>
 
                         <ul class="order-details-form mb-4">
-                            <li><span>Product</span> <span>Total</span></li>
-                            <li><span>Cocktail Yellow dress</span> <span>$59.90</span></li>
-                            <li><span>Subtotal</span> <span>$59.90</span></li>
-                            <li><span>Shipping</span> <span>Free</span></li>
-                            <li><span>Total</span> <span>$59.90</span></li>
+                            <li><span><b>Product</b></span> <span>Total</span></li>
+                            {% for key,item in cart.items %}
+                                <li><a href="{% url 'product' key %}" style="font-weight: normal;"><span>{{item.title}}</span></a> <span>#{{item.price}} X {{item.quantity}}</span></li>
+                            {% endfor %}
+                            <li><span><b>Subtotal</b></span> <span class="subtotal">0</span></li>
+                            <li><span><b>Delivery</b></span> <span class="deliveryamount">{% if request.session.deliverycost %}#{{request.session.deliverycost}}{% else %}...{% endif %}</span></li>
+                            <li><span><b>Total</b></span> <span class="total">0</span></li>
                         </ul>
-
-                        <div id="accordion" role="tablist" class="mb-4">
-                            <div class="card">
-                                <div class="card-header" role="tab" id="headingOne">
-                                    <h6 class="mb-0">
-                                        <a data-toggle="collapse" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne"><i class="fa fa-circle-o mr-3"></i>Paypal</a>
-                                    </h6>
-                                </div>
-
-                                <div id="collapseOne" class="collapse" role="tabpanel" aria-labelledby="headingOne" data-parent="#accordion">
-                                    <div class="card-body">
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin pharetra tempor so dales. Phasellus sagittis auctor gravida. Integ er bibendum sodales arcu id te mpus. Ut consectetur lacus.</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card">
-                                <div class="card-header" role="tab" id="headingTwo">
-                                    <h6 class="mb-0">
-                                        <a class="collapsed" data-toggle="collapse" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo"><i class="fa fa-circle-o mr-3"></i>cash on delievery</a>
-                                    </h6>
-                                </div>
-                                <div id="collapseTwo" class="collapse" role="tabpanel" aria-labelledby="headingTwo" data-parent="#accordion">
-                                    <div class="card-body">
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Explicabo quis in veritatis officia inventore, tempore provident dignissimos.</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card">
-                                <div class="card-header" role="tab" id="headingThree">
-                                    <h6 class="mb-0">
-                                        <a class="collapsed" data-toggle="collapse" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree"><i class="fa fa-circle-o mr-3"></i>credit card</a>
-                                    </h6>
-                                </div>
-                                <div id="collapseThree" class="collapse" role="tabpanel" aria-labelledby="headingThree" data-parent="#accordion">
-                                    <div class="card-body">
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Esse quo sint repudiandae suscipit ab soluta delectus voluptate, vero vitae</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card">
-                                <div class="card-header" role="tab" id="headingFour">
-                                    <h6 class="mb-0">
-                                        <a class="collapsed" data-toggle="collapse" href="#collapseFour" aria-expanded="true" aria-controls="collapseFour"><i class="fa fa-circle-o mr-3"></i>direct bank transfer</a>
-                                    </h6>
-                                </div>
-                                <div id="collapseFour" class="collapse show" role="tabpanel" aria-labelledby="headingThree" data-parent="#accordion">
-                                    <div class="card-body">
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Est cum autem eveniet saepe fugit, impedit magni.</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
                         <!-- <a href="#" class="btn essence-btn">Place Order</a> -->
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <!-- ##### Checkout Area End ##### -->
+    <!-- ##### Script for subtotal calculation ##### -->
+    <script type="text/javascript">
+        function mathround(number){
+            number = parseFloat(number)
+            li = number.toString()
+            li = li.split('.')
+            if(li.length==1) return li[0]
+            // console.log(li)
+            
+            if(li[1].length==1) return number
+            rn = li[1][2]
+            if(rn>4){
+                final = li[0]+'.'
+                s = parseInt(li[1][0]+li[1][1])+1
+                // console.log(s)
+                if(s.toString().length>2){
+                    final = parseFloat(final)+1
+                }else{
+                    final += s.toString()
+                }
+            }else{
+                final = li[0]+'.'+li[1][0]+li[1][1] 
+            }
+            return final
+        }
+        $(function(){
+            var DBcart = {{cart | safe}}
+            var tot = 0
+            for(i in DBcart){
+                tot += (DBcart[i].price * DBcart[i].quantity)
+            }
+            var deliv_fee = {{request.session.deliverycost}}
+
+            $('.order-details-confirmation .subtotal').text('#'+mathround(tot).toString())
+            $('.order-details-confirmation .total').text('#'+mathround(tot+deliv_fee).toString())
+
+            $('.checkout_area .delivLoc').on('change', function(){
+                var self = $(this)
+                $.ajax({
+                    url: '/api/deliverycost/',
+                    method: 'POST',
+                    data: {
+                        location: self.val(),
+                        'csrfmiddlewaretoken': $('.checkout_details_area form').find("input[name='csrfmiddlewaretoken']").val()
+                    },
+                    success: function(data){
+                        // _here_ (Cart Details by the side)
+                        $('.deliveryamount').text('#'+data.delivPrice)
+                        $('.order-details-confirmation .total').text('#'+mathround(tot+data.delivPrice).toString())
+                        
+
+                        // base.html (Side cart Summary)
+                        $('.cart-amount-summary .total').text('#'+mathround(tot+data.delivPrice).toString())
+                    },
+                    error: function(){
+                        alert('Error')
+                    }
+                })
+            })
+        })
+    </script>
+
+
 {% endblock %}

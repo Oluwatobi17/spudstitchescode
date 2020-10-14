@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+
+{% block content %}
+
+	<!-- ##### Shop Grid Area Start ##### -->
+	<section class="shop_grid_area section-padding-80">
+		<div class="container">
+			<div class="row">
+				<div class="col-12 col-md-4 col-lg-3">
+					<div class="shop_sidebar_area">
+
+						<!-- ##### Single Widget ##### -->
+						<div class="widget catagory mb-50">
+							<!-- Widget Title -->
+							<!--  Catagories  -->
+							<div class="catagories-menu">
+								<ul id="menu-content2" class="menu-content collapse show">
+									<!-- Single Item -->
+									<li data-toggle="collapse" data-target="#shoes" class="collapsed">
+										<a href="{% url 'superorders' %}"><img src="{% static 'index/img/core-img/bag.svg' %}" class="dac-icons">Orders</a>
+									</li>
+									<!-- Single Item -->
+									<li data-toggle="collapse" data-target="#accessories" class="collapsed">
+										<a href="{% url 'superusers' %}"><img src="{% static 'index/img/core-img/user.svg' %}" class="dac-icons">Users</a>
+									</li>
+									<li data-toggle="collapse" data-target="#accessories" class="collapsed">
+										<a href="{% url 'superitems' %}"><img src="{% static 'index/img/core-img/items.png' %}"  class="dac-icons">Items</a>
+									</li>
+									<li data-toggle="collapse" data-target="#accessories" class="collapsed">
+										<a href="{% url 'superadd' %}"><img src="{% static 'index/img/core-img/plus.png' %}"  class="dac-icons">Add Items</a>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-12 col-md-8 col-lg-9">
+					<div class="order-details-confirmation">
+
+                        <div class="cart-page-heading">
+                            <h5>Orders ({{carts | length}})</h5>
+                        </div>
+                        <ul class="order-details-form mb-4">
+                            <li><span>Name (username)</span> <span>Orders</span></li>
+                        	{% for cart in carts %}
+                        		{% if cart.delivered %}
+                            		<li><span><a href="{% url 'superorder' cart.pk %}">{{cart.date}}</a></span> <span>#{{cart.total_price}}</span></li>
+                        		{% else %}
+                        			<li><span><a href="{% url 'superorder' cart.pk %}" class="notdelivered">{{cart.date}}</a></span> <span class="notdelivered">#{{cart.total_price}}</span></li>
+                        		{% endif %}
+                        	{% endfor %}
+                        </ul>
+                    </div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!-- ##### Shop Grid Area End ##### -->
+{% endblock %}

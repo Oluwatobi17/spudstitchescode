@@ -13,19 +13,34 @@
     <title>{{ title }}</title>
 
     <!-- Favicon  -->
-    <link rel="icon" href="{% static 'index/img/core-img/favicon.ico' %}">
+    <link rel="icon" href="{% static 'index/img/core-img/spud.png' %}">
 
     <!-- Core Style CSS -->
     <link rel="stylesheet" href="{% static 'index/css/core-style.css' %}">
-    <link rel="stylesheet" href="{% static 'index/style.css' %}">
+    <!-- <link rel="stylesheet" href="{% static 'index/style.css' %}"> -->
     <link rel="stylesheet" href="{% static 'index/css/dac.css' %}">
 
     <style type="text/css">
         .spud-logo{
-            width: 60px;
-            height: 40px;
+            width: 50px;
+            height: 30px;
+        }
+        .spud-logo-bottom{
+            width: 50px;
+            height: 50px;
+        }
+        .qty_avail{
+            width: 20px;
+        }
+        .commodityPic{
+            width: 70px;
+            height: 70px;
+        }
+        .notdelivered{
+            color: green;
         }
     </style>
+    <script src="{% static '/index/js/jquery/jquery-2.2.4.min.js' %}"></script>
 </head>
 
 <body>
@@ -35,7 +50,7 @@
             <!-- Classy Menu -->
             <nav class="classy-navbar" id="essenceNav">
                 <!-- Logo -->
-                <a class="nav-brand spud-logo" href="index.html"><img src="{% static 'index/img/core-img/spud.png' %}" alt=""></a>
+                <a class="nav-brand spud-logo" href="{% url 'index' %}"><img src="{% static 'index/img/core-img/spud.png' %}" alt=""></a>
                 <!-- Navbar Toggler -->
                 <div class="classy-navbar-toggler">
                     <span class="navbarToggler"><span></span><span></span><span></span></span>
@@ -53,15 +68,15 @@
                             <li><a href="{% url 'index' %}">Home</a></li>
                             <li><a href="#">Shop</a>
                                 <div class="megamenu">
+                                    {% for tag in tags %}
                                     <ul class="single-mega cn-col-4">
-                                        <li class="title">Women's Collection</li>
-                                        <li><a href="{% url 'shop' category='dress' %}">Dresses</a></li>
-                                        <li><a href="{% url 'shop' category='dress' category='dress' %}">Blouses &amp; Shirts</a></li>
-                                        <li><a href="{% url 'shop' category='dress' %}">T-shirts</a></li>
-                                        <li><a href="{% url 'shop' category='dress' %}">Rompers</a></li>
-                                        <li><a href="{% url 'shop' category='dress' %}">Bras &amp; Panties</a></li>
+                                        
+                                        <!-- <li class="title">{{tag.name}}</li> -->
+                                        <li><a href="{% url 'shop' category=tag.name %}" style="text-transform:capitalize;">{{tag.name}}</a></li>
+                                        
                                     </ul>
-                                    <ul class="single-mega cn-col-4">
+                                    {% endfor %}
+                                    <!-- <ul class="single-mega cn-col-4">
                                         <li class="title">Men's Collection</li>
                                         <li><a href="{% url 'shop' category='dress' %}">T-Shirts</a></li>
                                         <li><a href="{% url 'shop' category='dress' %}">Polo</a></li>
@@ -76,7 +91,7 @@
                                         <li><a href="{% url 'shop' category='dress' %}">T-shirts</a></li>
                                         <li><a href="{% url 'shop' category='dress' %}">Jackets</a></li>
                                         <li><a href="{% url 'shop' category='dress' %}">Trench</a></li>
-                                    </ul>
+                                    </ul> -->
                                     <div class="single-mega cn-col-4">
                                         <img src="{% static 'index/img/bg-img/bg-6.jpg' %}" alt="">
                                     </div>
@@ -98,7 +113,8 @@
             <div class="header-meta d-flex clearfix justify-content-end">
                 <!-- Search Area -->
                 <div class="search-area">
-                    <form action="#" method="post">
+                    <form action="{% url 'search' %}" method="post">
+                        {% csrf_token %}
                         <input type="search" name="search" id="headerSearch" placeholder="Type for search">
                         <button type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
                     </form>
@@ -114,7 +130,7 @@
                 </div>
                 <!-- Cart Area -->
                 <div class="cart-area">
-                    <a href="#" id="essenceCartBtn"><img src="{% static 'index/img/core-img/bag.svg' %}" alt=""> <span>{{ cart | length }}</span></a>
+                    <a href="#" id="essenceCartBtn"><img src="{% static 'index/img/core-img/bag.svg' %}" alt=""> <span class="cartlength">{{ cart | length }}</span></a>
                 </div>
             </div>
 
@@ -133,11 +149,30 @@
             {% endfor %}
         </ul>
     {% endif %}
+    <template id="cartitemtemplate">
+        {% verbatim %}
+        <div class="single-cart-item" id="cart{{id}}">
+            <a href="/product/{{id}}" class="product-image">
+                <img src="{{ picture1 }}" class="cart-thumb" alt="">
+                <!-- Cart Item Desc -->
+                <div class="cart-item-desc">
+                  <!-- <span class="product-remove"><i class="fa fa-close" aria-hidden="true"></i></span> -->
+                    <span class="badge">Spud Stitches</span>
+                    <h6>{{ title }}</h6>
+                    <p class="size">Size: {{ size }}</p>
+                    <p class="color">Color: {{ color }}</p>
+                    <p class="color">Qty: {{ quantity }}</p>
+                    <p class="price">#{{ price }}</p>
+                </div>
+            </a>
+        </div>
+        {% endverbatim %}
+    </template>
     <div class="right-side-cart-area">
 
         <!-- Cart Button -->
         <div class="cart-button">
-            <a href="#" id="rightSideCart"><img src="{% static 'index/img/core-img/bag.svg' %}" alt=""> <span>{{ cart | length }}</span></a>
+            <a href="#" id="rightSideCart"><img src="{% static 'index/img/core-img/bag.svg' %}" alt=""> <span class="cartlength">{{ cart | length }}</span></a>
         </div>
 
         <div class="cart-content d-flex">
@@ -146,16 +181,17 @@
             <div class="cart-list">
                 <!-- Single Cart Item -->
                 {% for key, item in cart.items %}
-                    <div class="single-cart-item">
-                        <a href="#" class="product-image">
-                            <img src="{% static 'index/img/product-img/product-1.jpg' %}" class="cart-thumb" alt="">
+                    <div class="single-cart-item" id="cart{{key}}">
+                        <a href="{% url 'product' key %}" class="product-image">
+                            <img src="{{ item.picture1 }}" class="cart-thumb" alt="">
                             <!-- Cart Item Desc -->
                             <div class="cart-item-desc">
-                              <span class="product-remove"><i class="fa fa-close" aria-hidden="true"></i></span>
+                              <!-- <span class="product-remove"><i class="fa fa-close" aria-hidden="true"></i></span> -->
                                 <span class="badge">Spud Stitches</span>
                                 <h6>{{ item.title }}</h6>
                                 <p class="size">Size: {{ item.size }}</p>
                                 <p class="color">Color: {{ item.color }}</p>
+                                <p class="color">Qty: {{ item.quantity }}</p>
                                 <p class="price">#{{ item.price }}</p>
                             </div>
                         </a>
@@ -169,12 +205,13 @@
                 <h2>Summary</h2>
                 <ul class="summary-table">
                     <li><span>subtotal:</span> <span class="subtotal">#0</span></li>
-                    <li><span>delivery:</span> <span>Free</span></li>
+                    <li><span>delivery:</span> <span class="deliveryamount">{% if request.session.deliverycost %}#{{request.session.deliverycost}}{% else %}...{% endif %}</span></li>
                     <li><span>discount:</span> <span>-0%</span></li>
-                    <li><span>total:</span> <span class="total">#0</span></li>
+                    <li><span>total:</span><span class="total">#0</span></li>
                 </ul>
                 <div class="checkout-btn mt-100">
                     <a href="{% url 'checkout' %}" class="btn essence-btn">check out</a>
+                    <a href="{% url 'cart' %}" class="btn essence-btn">Cart</a>
                 </div>
             </div>
         </div>
@@ -194,13 +231,12 @@
                     <div class="single_widget_area d-flex mb-30">
                         <!-- Logo -->
                         <div class="footer-logo mr-50">
-                            <a href="#"><img src="{% static 'index/img/core-img/spud.png' %}" class="spud-logo" alt=""></a>
+                            <a href="{% url 'index' %}"><img src="{% static 'index/img/core-img/spud.png' %}" class="spud-logo-bottom" alt=""></a>
                         </div>
                         <!-- Footer Menu -->
                         <div class="footer_menu">
                             <ul>
-                                <li><a href="{% url 'shop' category='dress' %}">Shop</a></li>
-                                <li><a href="blog.html">Blog</a></li>
+                                <li><a href="{% url 'shop' category='all' %}">Shop</a></li>
                                 <li><a href="{% url 'contact' %}">Contact</a></li>
                             </ul>
                         </div>
@@ -210,10 +246,9 @@
                 <div class="col-12 col-md-6">
                     <div class="single_widget_area mb-30">
                         <ul class="footer_widget_menu">
-                            <li><a href="#">Order Status</a></li>
+                            <li><a href="{% url 'pending' %}">Order Status</a></li>
                             <li><a href="#">Payment Options</a></li>
                             <li><a href="#">Shipping and Delivery</a></li>
-                            <li><a href="#">Guides</a></li>
                             <li><a href="#">Privacy Policy</a></li>
                             <li><a href="#">Terms of Use</a></li>
                         </ul>
@@ -254,7 +289,7 @@
                 <div class="col-md-12 text-center">
                     <p>
                         <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-    Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
+    Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | Spud Stitches
     <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
                     </p>
                 </div>
@@ -265,7 +300,7 @@
     <!-- ##### Footer Area End ##### -->
 
     <!-- jQuery (Necessary for All JavaScript Plugins) -->
-    <script src="{% static '/index/js/jquery/jquery-2.2.4.min.js' %}"></script>
+    <script src="{% static '/index/js/jquery/mustache.js' %}"></script>
     <!-- Popper js -->
     <script src="{% static '/index/js/popper.min.js' %}"></script>
     <!-- Bootstrap js -->
@@ -277,15 +312,44 @@
     <!-- Active js -->
     <script src="{% static '/index/js/active.js' %}"></script>
 
+    <script src="{% static '/index/js/dac.js' %}"></script>
     <script type="text/javascript">
+        function mathround(number){
+            number = parseFloat(number)
+            li = number.toString()
+            li = li.split('.')
+            if(li.length==1) return li[0]
+            // console.log(li)
+            
+            if(li[1].length==1) return number
+            rn = li[1][2]
+            if(rn>4){
+                final = li[0]+'.'
+                s = parseInt(li[1][0]+li[1][1])+1
+                // console.log(s)
+                if(s.toString().length>2){
+                    final = parseFloat(final)+1
+                }else{
+                    final += s.toString()
+                }
+            }else{
+                final = li[0]+'.'+li[1][0]+li[1][1] 
+            }
+            return final
+        }
         $(document).ready(()=>{
             var cart = {{cart | safe}}
             var total = 0
             for(var item in cart){
-                total += cart[item]['price']
+                total += (cart[item]['price'] * cart[item]['quantity'])
             }
-            $('.summary-table .total').text('#'+total)
+            subtotal = mathround(total)
             $('.summary-table .subtotal').text('#'+total)
+
+            if ("{{request.session.deliverycost}}") {
+                subtotal = {{request.session.deliverycost}} + parseFloat(subtotal)
+            }
+            $('.summary-table .total').text('#'+subtotal)
         })
     </script>
 </body>

@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+
+{% block content %}
+
+	<!-- ##### Shop Grid Area Start ##### -->
+	<section class="shop_grid_area section-padding-80">
+		<div class="container">
+			<div class="row">
+				<div class="col-12 col-md-4 col-lg-3">
+					<div class="shop_sidebar_area">
+
+						<!-- ##### Single Widget ##### -->
+						<div class="widget catagory mb-50">
+							<!-- Widget Title -->
+							<!--  Catagories  -->
+							<div class="catagories-menu">
+								<ul id="menu-content2" class="menu-content collapse show">
+									<!-- Single Item -->
+									<li data-toggle="collapse" data-target="#shoes" class="collapsed">
+										<a href="{% url 'superorders' %}"><img src="{% static 'index/img/core-img/bag.svg' %}" class="dac-icons">Orders</a>
+									</li>
+									<!-- Single Item -->
+									<li data-toggle="collapse" data-target="#accessories" class="collapsed">
+										<a href="{% url 'superusers' %}"><img src="{% static 'index/img/core-img/user.svg' %}" class="dac-icons">Users</a>
+									</li>
+									<li data-toggle="collapse" data-target="#accessories" class="collapsed">
+										<a href="{% url 'superitems' %}"><img src="{% static 'index/img/core-img/items.png' %}"  class="dac-icons">Items</a>
+									</li>
+									<li data-toggle="collapse" data-target="#accessories" class="collapsed">
+										<a href="{% url 'superadd' %}"><img src="{% static 'index/img/core-img/plus.png' %}"  class="dac-icons">Add Items</a>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-12 col-md-8 col-lg-9">
+	                    <div class="checkout_details_area mt-50 clearfix">
+
+	                        <div class="cart-page-heading mb-30">
+	                            <h5>Add New Commodity</h5>
+	                        </div>
+
+	                        <form action="{% url 'superadd' %}" method="post" enctype="multipart/form-data">
+	                        	{% csrf_token %}
+	                            <div class="row">
+	                                <div class="col-md-6 mb-3">
+	                                    <label for="title">Commodity Title <span>*</span></label>
+	                                    <input type="text" class="form-control" id="title" name="title" required>
+	                                </div>
+	                                <div class="col-md-6 mb-3">
+	                                    <label for="qty_avail">Quantity Available <span>*</span></label>
+	                                    <input type="text" class="form-control" id="qty_avail" name="qty_avail" required>
+	                                </div>
+	                                <div class="col-md-6 mb-3">
+	                                    <label for="price">Price <span>*</span></label>
+	                                    <input type="text" class="form-control" id="price" name="price" required>
+	                                </div>
+	                                <div class="col-md-6 mb-3">
+	                                    <label for="percentageoff">Percentage Off <span>*</span></label>
+	                                    <input type="text" class="form-control" id="percentageoff" name="percentageoff">
+	                                </div>
+	                                <div class="col-12 mb-3">
+	                                    <label for="description">Description <span>*</span></label>
+	                                    <!-- <input type="text" class="form-control mb-3" id="street_address" value="{{request.user.address}}" name="address"> -->
+	                                    <textarea class="form-control mb-3" name="description" id="description"></textarea>
+	                                </div>
+	                                <div class="col-md-6 mb-3">
+	                                    <label for="colors">Colors <span>*</span></label>
+	                                    <input type="text" class="form-control" id="colors" name="colors" placeholder="Comma seperated (Blue,Yellow)" required>
+	                                </div>
+	                                <div class="col-md-6 mb-3">
+	                                    <label for="sizes">Sizes<span>*</span></label>
+	                                    <input type="text" class="form-control" id="sizes" name="sizes" placeholder="Comma seperated (X,XL)">
+	                                </div>
+
+	                                <div class="col-md-6 mb-3">
+	                                    <label for="picture1">Picture 1<span>*</span></label>
+	                                    <input type="file" class="form-control" id="picture1" name="picture1" required>
+	                                </div>
+	                                <div class="col-md-6 mb-3">
+	                                    <label for="picture2">Picture 2<span>*</span></label>
+	                                    <input type="file" class="form-control" id="picture2" name="picture2" required>
+	                                </div>
+	                                <div class="col-md-6 mb-3">
+	                                    <label for="picture3">Picture 3<span>*</span></label>
+	                                    <input type="file" class="form-control" id="picture3" name="picture3">
+	                                </div>
+	                                <div class="col-md-6 mb-3">
+	                                    <label for="tags">Tags<span>*</span></label>
+	                                    <input type="text" class="form-control" id="tags" name="tags" placeholder="Comma seperated (Hoodie,Joggers)">
+	                                </div>
+                                    <input type="submit" class="btn essence-btn" value="Add">
+	                            </div>
+	                        </form>
+	                    </div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!-- ##### Shop Grid Area End ##### -->
+{% endblock %}

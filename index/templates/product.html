@@ -11,46 +11,50 @@
         <!-- Single Product Thumb -->
         <div class="single_product_thumb clearfix">
             <div class="product_thumbnail_slides owl-carousel">
-                <img src="{% static 'index/img/product-img/product-big-1.jpg' %}" alt="">
-                <img src="{% static 'index/img/product-img/product-big-2.jpg' %}" alt="">
-                <img src="{% static 'index/img/product-img/product-big-3.jpg' %}" alt="">
+                <img src="{{commodity.picture1.url}}" alt="">
+                <img src="{{commodity.picture2.url}}" alt="">
+                {% if commodity.picture3 %}
+                    <img src="{{commodity.picture3.url}}" alt="">
+                {% endif %}
             </div>
         </div>
 
         <!-- Single Product Description -->
         <div class="single_product_desc clearfix">
-            <span>mango</span>
-            <a href="cart.html">
-                <h2>One Shoulder Glitter Midi Dress</h2>
-            </a>
-            <p class="product-price"><span class="old-price">$65.00</span> $49.00</p>
-            <p class="product-desc">Mauris viverra cursus ante laoreet eleifend. Donec vel fringilla ante. Aenean finibus velit id urna vehicula, nec maximus est sollicitudin.</p>
+            <span>Spud</span>
+
+            <h2>{{commodity.title}}</h2>
+            <p class="product-price">{% if commodity.formerprice %}<span class="old-price">#{{ commodity.formerprice }}</span>{% endif %} #{{ commodity.price }}</p>
+            <p class="product-desc">{{ commodity.description }}</p>
 
             <!-- Form -->
-            <form class="cart-form clearfix" method="post">
+            <form class="cart-form clearfix" id="{{commodity.id}}">
+                {% csrf_token %}
+                <input type="hidden" name="commodity" value="{{commodity.pk}}">
                 <!-- Select Box -->
                 <div class="select-box d-flex mt-50 mb-30">
                     <select name="select" id="productSize" class="mr-5">
-                        <option value="value">Size: XL</option>
-                        <option value="value">Size: X</option>
-                        <option value="value">Size: M</option>
-                        <option value="value">Size: S</option>
+                        {% for size in sizes %}
+                            <option value="{{size}}">Size: {{size}}</option>
+                        {% endfor %}
                     </select>
                     <select name="select" id="productColor">
-                        <option value="value">Color: Black</option>
-                        <option value="value">Color: White</option>
-                        <option value="value">Color: Red</option>
-                        <option value="value">Color: Purple</option>
+                        {% for color in colors %}
+                            <option value="{{color}}">Color: {{color}}</option>
+                        {% endfor %}
                     </select>
                 </div>
                 <!-- Cart & Favourite Box -->
-                <div class="cart-fav-box d-flex align-items-center">
+                <div class="cart-fav-box d-flex align-items-center" data-id="{{commodity.id}}">
                     <!-- Cart -->
+                    
                     <button type="submit" name="addtocart" value="5" class="btn essence-btn">Add to cart</button>
-                    <!-- Favourite -->
-                    <div class="product-favourite ml-4">
-                        <a href="#" class="favme fa fa-heart"></a>
+
+                    <div class="product-favourite ml-4" style="margin-right: 12px;">
+                        <a href="#" class="favme fa fa-heart fav {% if commodity.id in favourites %}active{% endif %}" data-action="{% if commodity.id in favourites %}remove{% else %}add{% endif %}" data-id="{{commodity.pk}}"></a>
                     </div>
+                    <!-- Favourite -->
+                    <input type="number" id="quantity" class="nice-select qty_avail" placeholder="Quantity" min="1" max="{{commodity.qty_avail}}">
                 </div>
             </form>
         </div>

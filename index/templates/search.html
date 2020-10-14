@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+
+{% block content %}
+	<!-- ##### Breadcumb Area Start ##### -->
+	<!-- <div class="breadcumb_area bg-img" style="background-image: url(/static/index/img/bg-img/breadcumb.jpg);">
+		<div class="container h-100">
+			<div class="row h-100 align-items-center">
+				<div class="col-12">
+					<div class="page-title text-center">
+						<h2>Search ({{cart | length}})</h2>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div> -->
+	<!-- ##### Breadcumb Area End ##### -->
+
+	<!-- ##### Shop Grid Area Start ##### -->
+	<section class="shop_grid_area section-padding-80">
+		<div class="container">
+			<div class="row">
+
+				<div class="col-12 col-md-8 col-lg-9">
+					<div class="shop_grid_product_area">
+						<div class="row">
+							<div class="col-12">
+								<div class="product-topbar d-flex align-items-center justify-content-between">
+									<!-- Total Products -->
+									<div class="total-products">
+										<p><span>{{ cart | length }}</span> products found</p>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="row">
+
+							{% for item in cart %}
+								<!-- Single Product -->					
+								<div class="col-12 col-sm-6 col-lg-4 forcart">
+									<div class="single-product-wrapper" data-id="{{item.pk}}">
+										<!-- Product Image -->
+										<div class="product-img">
+											{% if not item.picture1 %}
+											<img src="{% static 'index/img/product-img/product-1.jpg' %}" alt="">
+											<!-- Hover Thumb -->
+											<img class="hover-img" src="{% static 'index/img/product-img/product-2.jpg' %}" alt="">
+											{% else %}
+											<img src="{{ item.picture1.url }}" alt="">
+											<!-- Hover Thumb -->
+											<img class="hover-img" src="{{ item.picture2.url }}" alt="">
+											{% endif %}
+											<!-- Product Badge -->
+											<!-- <div class="product-badge offer-badge">
+												<span>-30%</span>
+											</div> -->
+											<!-- Favourite -->
+											<div class="product-favourite">
+												<a href="#" class="favme fa fa-heart fav {% if item.pk in favourites %}active{% endif %}" data-action="{% if item.pk in favourites %}remove{% else %}add{% endif %}"></a>
+											</div>
+										</div>
+
+										<!-- Product Description -->
+										<div class="product-description">
+											<a href="{% url 'product' item.pk %}">
+												<h6>{{ item.title }}</h6>
+											</a>
+											<p class="product-price">{% if item.formerprice %}<span class="old-price">#{{ item.formerprice }}</span>{% endif %} #{{ item.price }}</p>
+
+											<!-- Hover Content -->
+											<div class="hover-content">
+												<!-- Add to Cart -->
+												<div class="add-to-cart-btn">
+													{% if item.pk in cartlist %}
+			                                            <a href="#" class="btn essence-btn" data-action="remove">Remove Cart</a>
+			                                        {% else %}
+			                                            <a href="#" class="btn essence-btn" data-action="add">Add to Cart</a>
+			                                        {% endif %}
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							{% empty %}
+								<p>You have not added item to your cart</p>
+							{% endfor %}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	    
+	<!-- ##### Shop Grid Area End ##### -->
+{% endblock %}

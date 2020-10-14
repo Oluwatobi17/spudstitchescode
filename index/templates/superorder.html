@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+
+{% block content %}
+
+	<!-- ##### Shop Grid Area Start ##### -->
+	<section class="shop_grid_area section-padding-80">
+		<div class="container">
+			<div class="row">
+				<div class="col-12 col-md-4 col-lg-3">
+					<div class="shop_sidebar_area">
+
+						<!-- ##### Single Widget ##### -->
+						<div class="widget catagory mb-50">
+							<!-- Widget Title -->
+							<!--  Catagories  -->
+							<div class="catagories-menu">
+								<ul id="menu-content2" class="menu-content collapse show">
+									<!-- Single Item -->
+									<li data-toggle="collapse" data-target="#shoes" class="collapsed">
+										<a href="{% url 'superorders' %}"><img src="{% static 'index/img/core-img/bag.svg' %}" class="dac-icons">Orders</a>
+									</li>
+									<!-- Single Item -->
+									<li data-toggle="collapse" data-target="#accessories" class="collapsed">
+										<a href="{% url 'superusers' %}"><img src="{% static 'index/img/core-img/user.svg' %}" class="dac-icons">Users</a>
+									</li>
+									<li data-toggle="collapse" data-target="#accessories" class="collapsed">
+										<a href="{% url 'superitems' %}"><img src="{% static 'index/img/core-img/items.png' %}"  class="dac-icons">Items</a>
+									</li>
+									<li data-toggle="collapse" data-target="#accessories" class="collapsed">
+										<a href="{% url 'superadd' %}"><img src="{% static 'index/img/core-img/plus.png' %}"  class="dac-icons">Add Items</a>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-12 col-md-8 col-lg-9">
+					<div class="order-details-confirmation">
+                        <div class="cart-page-heading">
+                            <h5>Orders ({{carts.order_set.all | length}}) <small>{{carts.date}}</small></h5>
+                        </div>
+                        <ul class="order-details-form mb-4">
+                            <li><span><b>Commodity</b></span> <span><b>Orders</b></span></li>
+                            {% for item in carts.order_set.all %}
+                        		<li><span><a href="{% url 'product' item.pk %}">{{item.commodity.title}}</a></span> <span>#{{item.commodity.price}} X {{item.quantity}}</span></li>
+                        	{% endfor %}
+
+                        	<li><span><b>Total Price</b></span> <span><b>#{{carts.total_price}}</b></span></li>
+                        </ul>
+                    </div>
+
+                    <div class="order-details-confirmation">
+                        <div class="cart-page-heading">
+                            <h5>Billing Address</h5>
+                        </div>
+                        <ul class="order-details-form mb-4">
+                        	<li><span>User</span> <span>{{carts.user.username}}</span></li>
+
+                        	<li><span>Billing Name</span> <span>{{carts.name}}</span></li>
+
+                        	<li><span>Town</span> <span>{{carts.town}}</span></li>
+
+                        	<li><span>Phone No</span> <span>{{carts.phoneno}}</span></li>
+
+                        	<li><span>Email</span> <span>{{carts.email}}</span></li>
+
+                        	<li><span>Delivered</span> <span class="deliv">{{carts.delivered}}</span></li>
+
+                        	<li><span>Payment Method</span> <span>{{carts.paymentmethod}}</span></li>
+
+                        	<li><span>Reference</span> <span>{{carts.paymentref}}</span></li>
+                        </ul>
+
+                        <a href="#deliver" id="{{carts.pk}}" class="btn essence-btn deliver">Deliver</a>
+                    </div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<script type="text/javascript">
+		$(function(){
+			$('.order-details-confirmation .deliver').on('click', function(){
+				var self = $(this)
+				$.ajax({
+					url: '/api/deliver/'+self.attr('id'),
+					success: function(data){
+						if(data){
+							$('.order-details-confirmation .deliv').text('True')
+						}else{
+							alert('Error')
+						}
+					},
+					error: function(){
+						self.addClass('fav')
+						alert('Err')
+					}
+				})
+			})
+		})
+	</script>
+	<!-- ##### Shop Grid Area End ##### -->
+{% endblock %}

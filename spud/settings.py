@@ -25,7 +25,7 @@ SECRET_KEY = '@uzaul__od4)72&w=t&vd@!qh7^gy^qf#x^y^c^gj7@%1+spga'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['spudstitches.herokuapp.com']
+ALLOWED_HOSTS = ['spudstitch.herokuapp.com']
 # ALLOWED_HOSTS = []
 
 
@@ -64,6 +64,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'spud.urls'
+SESSION_SAVE_EVERY_REQUEST = True
 
 TEMPLATES = [
     {
@@ -127,11 +128,18 @@ USE_L10N = True
 
 USE_TZ = True
 
+######  MY VARIABLES ######
+PAYSTACK_PK = 'sk_test_e438bb459197d3aa45eb21cc48a073cd75c7c99c' 
+# PAYSTACK_PK = os.environ.get('paystack_pk_auth')
+
+
+# For access the media file
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 STATIC_ROOT  =   os.path.join(PROJECT_ROOT, 'staticfiles')
 STATIC_URL = '/static/'
-
 
 # Extra lookup directories for collectstatic to find static files
 STATICFILES_DIRS = (
