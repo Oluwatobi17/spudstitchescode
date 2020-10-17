@@ -12,6 +12,7 @@ from decimal import Decimal
 import requests
 from spud import settings
 import json
+from django.core.mail import send_mail, EmailMessage
 
 delivLoc1 = ['Ikoyi/VI','Oshodi','Surulere','Yaba','Ikeja','Festac','Ketu',
 		'Ojota','Ogba','Maryland','Onipanu','Ilupeju','Mushin','Ikokun',
@@ -126,6 +127,34 @@ def account(request):
 
 	messages.error(request, "Please login or signup if you don't have an account yet")
 	return redirect(login)
+
+
+def forgotpass(request):
+	if request.method=='POST':
+		username = request.POST['username'].replace(' ', '')
+		if username:
+			if User.objects.filter(username=username):
+				user = User.objects.get(username=username)
+				newpass = get_random_string(6)
+				message = "Hello, {}. Your new password is {}. \n Please ignore this message if you don't have a Project account".format(user.first_name, newpass)
+				
+				res = send_mail('Password reset', message, "ibdac2000@gmail.com",[user.email], fail_silently=True)
+				if res==None:
+					messages.error(request, 'Unable to reset password, please try again')
+				else:
+					user.set_password(newpass)
+					user.save()
+					messages.success(request, 'New Password has been sent to your email')
+				return redirect(login)
+			else:
+				messages.error(request, 'Username does not exist. Please check your letter case')
+				return redirect(login)
+		else:
+			messages.error(request, 'Please enter the username you want to reset password')
+			return redirect(login)
+	else:
+		return redirect(login)
+
 
 def orders(request):
 	if request.user.is_authenticated:

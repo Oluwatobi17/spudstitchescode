@@ -28,9 +28,24 @@ ul.messagelist li.error {
     height: 18px;
     margin-right: 10px;
 }
-/*.single-product-wrapper .product-img img{
-    max-height: 200px;
+.spud-logo{
+    width: 50px;
+    height: 30px;
 }
-.single-product-wrapper .hover-img img{
-    max-height: 200px;
-}*/
+.spud-logo-bottom{
+    width: 50px;
+    height: 50px;
+}
+.qty_avail{
+    width: 20px;
+}
+.commodityPic{
+    width: 70px;
+    height: 70px;
+}
+.notdelivered{
+    color: green;
+}
+.hide{
+    display: none;
+}

@@ -15,6 +15,7 @@ urlpatterns = [
     path('account/recently-viewed/', views.recent, name='recent'),
     path('account/change-password/', views.changepassword, name='changepassword'),
     path('cart/', views.cart, name='cart'),
+    path('forgot-pass/', views.forgotpass, name='forgotpass'),
     path('cccomplete-payment/', views.completepayment, name='completepayment'),
     path('contact/', views.contact, name='contact'),
     path('checkout/', views.checkout, name='checkout'),

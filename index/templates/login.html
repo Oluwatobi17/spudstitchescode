@@ -71,8 +71,34 @@
 										<label for="password">Password</label>
 										<input type="password" class="form-control mb-3" id="password" name="password">
 									</div>
+
+									<a href="#" class="forgotpasslink">Forgot Password?</a>
+									<br>
+									<br>
 								<div class="col-12 mb-3">
 									<input type="submit" value="Login" class="btn essence-btn">
+								</div>
+							</div>
+						</form>
+					</div>
+
+
+					<!-- Forget pass -->
+					<div class="order-details-confirmation hide">
+						<form action="{% url 'forgotpass' %}" method="post">
+							{% csrf_token %}
+							<div class="cart-page-heading">
+								<h5>Forgot Password</h5>
+									<div class="col-12 mb-3">
+										<label for="username">Username</label>
+										<input type="text" class="form-control mb-3" id="username" name="username">
+									</div>
+
+									<a href="#" class="forgotpasslink">Login</a>
+									<br>
+									<br>
+								<div class="col-12 mb-3">
+									<input type="submit" value="Reset Password" class="btn essence-btn">
 								</div>
 							</div>
 						</form>
@@ -81,5 +107,13 @@
 			</div>
 		</div>
 	</div>
+
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$('.ml-lg-auto .forgotpasslink').on('click', function(){
+				$('.ml-lg-auto .order-details-confirmation').toggleClass('hide')
+			})
+		})
+	</script>
 	<!-- ##### Checkout Area End ##### -->
 {% endblock %}

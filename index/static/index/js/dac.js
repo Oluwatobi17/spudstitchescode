@@ -183,8 +183,6 @@ $(function(){
 					
 					// subtotal += (parseFloat(data.content.price)*parseInt(data.content.quantity))
 					subtotal = mathround(totalprice)
-					alert('Subtotal')
-					alert(subtotal)
 					$cartnumbers.find('.subtotal').text('#'+subtotal)
 					$cartnumbers.find('.total').text('#'+subtotal)
 				}else{
