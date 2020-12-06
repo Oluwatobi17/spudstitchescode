@@ -26,9 +26,10 @@ $(function(){
     // Add or remove item from favourite "General"
 	$('.product-favourite .fav').on('click', function(){
 		var self = $(this)
-		self.removeClass('fav')
+		self.removeClass('fav') 
+		var id = self.closest('.single-product-wrapper').data('id') // || self.data('id')
 		$.ajax({
-			url: '/api/favourite/'+self.closest('.single-product-wrapper').data('id')+'/'+self.data('action'),
+			url: '/api/favourite/'+id+'/'+self.data('action'),
 			success: function(data){
 				if(data){
 					if(self.data('action')=='add'){

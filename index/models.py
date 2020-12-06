@@ -19,9 +19,9 @@ class Commodity(models.Model):
 	description = models.TextField()
 	colors = models.CharField(max_length=1000) # Blue***Green
 	sizes = models.CharField(max_length=1000) # X***XL
-	picture1 = models.FileField()
-	picture2 = models.FileField()
-	picture3 = models.FileField()
+	picture1 = models.FileField(upload_to='media')
+	picture2 = models.FileField(upload_to='media')
+	picture3 = models.FileField(upload_to='media')
 	date = models.DateTimeField(auto_now_add=True)
 	tags = TaggableManager() # All tags should be in Small letter
 

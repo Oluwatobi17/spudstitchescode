@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+# from django.core.mail import send_mail
+
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -25,8 +27,8 @@ SECRET_KEY = '@uzaul__od4)72&w=t&vd@!qh7^gy^qf#x^y^c^gj7@%1+spga'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['spudstitch.herokuapp.com']
-# ALLOWED_HOSTS = []
+# ALLOWED_HOSTS = ['spudstitch.herokuapp.com']
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -42,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'taggit',
+    'storages',
 ]
 
 AUTH_USER_MODEL = 'index.User'
@@ -53,7 +56,7 @@ REST_FRAMEWORK = {
 }
 
 MIDDLEWARE = [
-    'whitenoise.middleware.WhiteNoiseMiddleware',
+    # 'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -118,6 +121,17 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
 
+# GMAIL
+
+
+# SENDGRID
+# EMAIL_HOST = 'smtp.sendgrid.net'
+# EMAIL_PORT = 587
+# EMAIL_HOST_USER = 'parsifal_app'
+# EMAIL_HOST_PASSWORD = 'mys3cr3tp4ssw0rd'
+# EMAIL_USE_TLS = True
+
+
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
@@ -128,28 +142,74 @@ USE_L10N = True
 
 USE_TZ = True
 
-######  MY VARIABLES ######
-PAYSTACK_PK = 'sk_test_e438bb459197d3aa45eb21cc48a073cd75c7c99c' 
-# PAYSTACK_PK = os.environ.get('paystack_pk_auth')
+import info
+
+
+PAYSTACK_PK = info.PAYSTACK_PK
+
+# AWS CONFIG
+# to make sure all your files gives read only access to the files
+# AWS_DEFAULT_ACL = "public-read"
+AWS_ACCESS_KEY_ID = info.AWS_ACCESS_KEY_ID
+AWS_SECRET_ACCESS_KEY = info.AWS_SECRET_ACCESS_KEY
+AWS_STORAGE_BUCKET_NAME = info.AWS_STORAGE_BUCKET_NAME 
+
+AWS_S3_FILE_OVERWRITE = False
+AWS_DEFAULT_ACL = None
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage' # comment this for PC static
+AWS_S3_REGION_NAME = 'us-east-2'
+AWS_LOCATION = 'static'
+
+
+
+# # AWS CONFIG
+# # to make sure all your files gives read only access to the files
+# AWS_DEFAULT_ACL = "public-read"
+# AWS_ACCESS_KEY_ID = os.environ.get('ACCESS_KEY_AWS')
+# AWS_SECRET_ACCESS_KEY = os.environ.get('ACCESS_SECRET_AWS')
+# AWS_STORAGE_BUCKET_NAME = os.environ.get('ACCESS_BUCKET_NAME_AWS')
+# AWS_S3_SIGNATURE_VERSION = 's3v4'
+# AWS_S3_REGION_NAME = 'eu-west-2'
+# AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
+# AWS_S3_OBJECT_PARAMETERS = {
+#     'CacheControl': 'max-age=86400',
+# }
+# AWS_LOCATION = 'static'
 
 
 # For access the media file
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+# MEDIA_URL = '/media/'
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
-PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-STATIC_ROOT  =   os.path.join(PROJECT_ROOT, 'staticfiles')
+MEDIA_URL = '/media/'
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+
+# PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# STATIC_ROOT  =   os.path.join(PROJECT_ROOT, 'staticfiles')
 STATIC_URL = '/static/'
 
 # Extra lookup directories for collectstatic to find static files
-STATICFILES_DIRS = (
-    os.path.join(PROJECT_ROOT, 'static'),
-)
+# STATICFILES_DIRS = (
+#     os.path.join(PROJECT_ROOT, 'static'),
+# )
 
 #  Add configuration for static files storage using whitenoise
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+# STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 
-import dj_database_url 
-prod_db  =  dj_database_url.config(conn_max_age=500)
-DATABASES['default'].update(prod_db)
+# import dj_database_url 
+# prod_db  =  dj_database_url.config(conn_max_age=500)
+# DATABASES['default'].update(prod_db)
+
+
+# <?xml version="1.0" encoding="UTF-8"?>
+# <CORSConfiguration xmlns="http://s3.amazonaws.com/doc/2006-03-01/">
+#     <CORSRule>
+#         <AllowedOrigin>*</AllowedOrigin>
+#         <AllowedMethod>GET</AllowedMethod>
+#         <AllowedMethod>POST</AllowedMethod>
+#         <AllowedMethod>PUT</AllowedMethod>
+#         <AllowedHeader>*</AllowedHeader>
+#     </CORSRule>
+# </CORSConfiguration>

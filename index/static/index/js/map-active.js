@@ -1,5 +1,5 @@
 var map;
-var latlng = new google.maps.LatLng(6.5095, 3.3711);
+var latlng = new google.maps.LatLng(6.658680, 3.280780);
 var stylez = [
     {
         "featureType": "administrative.locality",
@@ -176,7 +176,7 @@ var mapOptions = {
 };
 map = new google.maps.Map(document.getElementById("googleMap"), mapOptions);
 var geocoder_map = new google.maps.Geocoder();
-var address = 'London';
+var address = 'Nigeria';
 geocoder_map.geocode({
     'address': address
 }, function (results, status) {

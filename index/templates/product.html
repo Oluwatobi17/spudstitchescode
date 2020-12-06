@@ -54,7 +54,7 @@
                         <a href="#" class="favme fa fa-heart fav {% if commodity.id in favourites %}active{% endif %}" data-action="{% if commodity.id in favourites %}remove{% else %}add{% endif %}" data-id="{{commodity.pk}}"></a>
                     </div>
                     <!-- Favourite -->
-                    <input type="number" id="quantity" class="nice-select qty_avail" placeholder="Quantity" min="1" max="{{commodity.qty_avail}}">
+                    <input type="number" id="quantity" class="nice-select qty_avail" placeholder="Quantity" min="1" max="{{commodity.qty_avail}}" value="1">
                 </div>
             </form>
         </div>

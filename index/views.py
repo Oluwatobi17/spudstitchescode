@@ -172,8 +172,6 @@ def orders(request):
 
 
 def pendingOrders(request):
-	print('Key')
-	print(settings.PAYSTACK_PK)
 	if request.user.is_authenticated:
 		user = User.objects.get(username=request.user.username)
 		return render(request, 'pendingOrders.html', {
@@ -318,6 +316,7 @@ def contact(request):
 
 
 def checkout(request):
+	print(settings.PAYSTACK_PK)
 	if request.method=='POST':
 		if request.user.is_authenticated:
 			if request.session.get('cart', False):
@@ -355,7 +354,7 @@ def checkout(request):
 
 						url = 'https://api.paystack.co/transaction/initialize/'
 						response = requests.post(url, headers=headers,data=json.dumps(data))
-
+						
 						res = response.json()
 						if res['status']==True:
 							request.session['paystackpaymentref'] = res['data']['reference']
@@ -367,7 +366,6 @@ def checkout(request):
 
 					# if not cc
 
-					print('Got here!')
 					cartobj = cartform.save(commit=True)
 					for id in cart:
 						id_obj = Commodity.objects.get(pk=id)
@@ -379,6 +377,10 @@ def checkout(request):
 
 					# cartobj.user = User.objects.get(username=request.user.username)
 					cartobj.save()
+					admin = User.objects.filter(is_superuser=True)[0]
+					message = "Hello, {}. New Order received, ref: {}".format(admin.first_name, cartobj.paymentref)
+				
+					res = send_mail('Password reset', message, "ibdac2000@gmail.com",[admin.email], fail_silently=True)
 					messages.success(request, 'Order received. Thanks for Shopping with us')
 					return redirect(pendingOrders) 
 
@@ -433,6 +435,11 @@ def completepayment(request):
 				
 			# cartobj.user = User.objects.get(username=request.user.username)
 			cartobj.save()
+
+		admin = User.objects.filter(is_superuser=True)[0]
+		message = "Hello, {}. New Order received, ref: {}".format(admin.first_name, cartobj.paymentref)
+	
+		res = send_mail('Password reset', message, "ibdac2000@gmail.com",[admin.email], fail_silently=True)
 		messages.success(request, 'Payment Complete and order received. Thanks for Shopping with us')
 		return redirect(pendingOrders)
 
